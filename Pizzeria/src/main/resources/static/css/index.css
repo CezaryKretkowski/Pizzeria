@@ -1,0 +1,49 @@
+body{
+    background-image: url("../images/mainBackground.jpg");
+    background-size: contain;
+}
+header{
+    height: 500px;
+    text-align: center;
+
+}
+header.img{
+    margin-left: auto;
+    margin-right: auto;
+    display: block
+}
+.Home{
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    background-color: rgb(240, 240, 240);
+}
+.navbar{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    cursor:pointer;
+}
+.NavLink{
+    text-decoration: none;
+    color: black;
+}
+.NavLink:hover{
+    color: gold;
+}
+.NavLink:active{
+    color: gold;
+}
+.menu{
+    position:fixed;
+    top:0;
+    width: 100%;
+    background-color: rgb(240,240,240);
+}
+.basket{
+    float:right;
+    background-color:white;
+    position:absolute;
+    height:100vh;
+    width:30%;
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="about">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <h1>Aktulaności</h1>
+    <div class="form-group m-5">
+        <div style="width:100;" class="bg-light border p-2">
+
+            <div class="border me-2 NavMenuMarkdown" id="addHeader" style="float:left;">
+                <a onclick="add(1)" class=" link-dark text-decoration-none"><i class="fa fa-header m-2"
+                                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div class="border me-2 NavMenuMarkdown"  id="addBold" style="float:left;">
+                <a onclick="add(2)" class=" link-dark text-decoration-none"><i class="fa fa-bold m-2"
+                                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div class="border me-2 NavMenuMarkdown" id="addItalic" style="float:left;">
+                <a onclick="add(3)" class=" link-dark text-decoration-none"><i class="fa fa-italic m-2"
+                                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div  class="border NavMenuMarkdown" style="width:2px; height:30px; float:left;"></div>
+
+            <div class="border mx-2" id="addList" style="float:left;">
+                <a onclick="add(4)" class=" link-dark text-decoration-none"><i class="fa fa-list m-2"
+                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div class="border me-2 NavMenuMarkdown" id="addNumberList" style="float:left;">
+                <a onclick="add(5)" class=" link-dark text-decoration-none"><i class="fa fa-list-ol m-2"
+                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div  class="border NavMenuMarkdown" style="width:2px; height:30px; float:left;"></div>
+
+
+            <div class="mx-2 border NavMenuMarkdown" style="float:left;">
+                <a onclick="renderMarkdown()" class=" link-dark text-decoration-none"><i class="fa fa-eye m-2"
+                                                                                         aria-hidden="true"></i></a>
+            </div>
+            <div  class="border" style="width:2px; height:30px; float:left;"></div>
+            <div class="mx-2" style="float:right;">
+                <button class="btn btn-success" id="submit" form="ContentForm" disabled="true" role="submit">Save</button>
+            </div>
+
+            <div style="clear:both"></div>
+
+        </div>
+        <form id="ContentForm" th:method="post" th:action="@{/update_info}">
+        <textarea id="markdown" style="width:100%; height:400px; display:block;" oninput="onChangeValue()" rows="12" th:utext="${content}" name="content"
+                  class="form-control"></textarea>
+        </form>
+
+        <div style="width:100%; height:400px; display:none; overflow:auto;" class="border rounded" id="preview">
+
+        </div>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var isNumList=false;
+            var last=0;
+            function renderMarkdown() {
+                preview=document.getElementById("markdown").style.display;
+                if(preview=="block"){
+                    document.getElementById("markdown").style.display="none";
+                    document.getElementById("preview").style.display="block";
+                }else{
+                    document.getElementById("markdown").style.display="block";
+                    document.getElementById("preview").style.display="none";
+                }
+                var markdownText = document.getElementById("markdown").value;
+                var previewElement = document.getElementById("preview");
+                previewElement.innerHTML = marked.parse(markdownText);
+            }
+
+            function add(id){
+                document.getElementById("markdown").style.display="block";
+                document.getElementById("preview").style.display="none";
+                console.log(id);
+                textarea = document.getElementById("markdown");
+                const [start, end] = [textarea.selectionStart, textarea.selectionEnd];
+                if(id==1){
+                    textarea.setRangeText("# ", start, end, 'select');
+                    textarea.focus();
+                    textarea.setSelectionRange(start+1,start+1);
+                }
+                if(id==2){
+                    textarea.setRangeText("**", start, end, 'select');
+                    textarea.setRangeText("**", start+2, end+2, 'select');
+                    textarea.focus();
+                    textarea.setSelectionRange(start+2,start+2);
+                }
+                if(id==3){
+                    textarea.setRangeText("*", start, end, 'select');
+                    textarea.setRangeText("*", start+1, end+1, 'select');
+                    textarea.focus();
+                    textarea.setSelectionRange(start+1,start+1);
+                }
+                if(id==4){
+
+                    textarea.setRangeText("* ", start, end, 'select');
+                    textarea.focus();
+                    textarea.setSelectionRange(start+2,start+2);
+                }
+                if(id==5){
+                    last =last+1;
+                    textarea.setRangeText(last+". ", start, end, 'select');
+                    textarea.focus();
+                    textarea.setSelectionRange(start+3,start+3);
+                }else{
+
+                    last=0;
+                }
+
+            }
+
+            function onChangeValue(){
+                let content= /*[[${content}]]*/ "";
+                let val = document.getElementById("markdown").value;
+
+                if (content != val){
+                    document.getElementById("submit").disabled =false;
+                }else
+                {
+                    document.getElementById("submit").disabled =true;
+                }
+            }
+
+
+            /*]]>*/
+        </script>
+
+    </div>
+</div>
+</body>
+</html>

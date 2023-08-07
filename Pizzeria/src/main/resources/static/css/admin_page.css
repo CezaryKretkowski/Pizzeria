@@ -1,0 +1,31 @@
+body{
+    height: 100vh;
+}  
+.NavBar{  
+    background-color: #343A40;
+    width: 10%;
+    height: 95vh;
+    text-align: center;
+}
+.NavButton{
+    cursor:pointer;
+    color:white;
+}
+.NavButton:hover{
+    color:gold;
+}
+.NavMenuMarkdown{
+    cursor:pointer;
+}
+.NavMenuMarkdown:hover{
+    cursor:pointer;
+    background-color:grey;
+}
+.NavBarAbsolut{
+    position: absolute;
+    background-color: #343A40;
+    width: 150px;
+    height: 100vh;
+    text-align: center;
+    display: none;
+}

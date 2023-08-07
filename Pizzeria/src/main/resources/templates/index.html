@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizzeria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Koszyk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="busketContainer" style="overflow: auto; height: 200px;">
+            <!-- <div class="m-3 border-bottom border-dark " >
+                <button type="button" class="btn-close float-end"></button>
+                <h6>Nazwa: Caprisciosa </h6>
+                <h6>Cena: 75.50zł</h6>
+                <div class="mb-2 row">
+                    <h6 class="form-label col">Ilość :</h6>
+                    <input type="number" step="0.01" class="form-control col w-50" >
+                </div>
+            </div> -->
+        </div>
+        <div>
+            <h5 class="mb-3">Cena: <span id="total_Price"></span></h5>
+
+            <div class="mb-3">
+                <label  class="form-label">Email adres</label>
+                <input type="email" class="form-control" >
+              </div>
+              <div class="mb-3">
+                <label  class="form-label">Telefon</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label  class="form-label">Ulica</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label  class="form-label">Numer domu</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label  class="form-label">Numer lokalu</label>
+                <input type="number" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label  class="form-label">Płatność</label>
+              <select class="form-select" aria-label="Default select example">
+                <option value="1"  selected>Płatność przy odbiorze: gotówka</option>
+                <option value="2">Płatność przy odbiorze: Karta</option>
+                <option value="3">PeyYu</option>
+              </select>
+            </div>
+            <button class="btn btn-success mb-3">Zamów</button>
+        </div>
+    </div>
+</div>
+<header>
+    <img th:src="@{/images/logo.png}"/>
+</header>
+<div class="container-fluid" th:class="Home">
+    <div class="navbar" >
+        <ul class="nav ms-5" id="navbarHeder">
+            <li class="nav-item h3">
+                <a class="me-4 NavLink"  onclick="scrollToHaader('About_us')">Start</a>
+            </li>
+            <li class="nav-item h3">
+                <a class="mx-4 NavLink"  onclick="scrollToHaader('Menu')">Menu</a>
+            </li>
+            <li class="nav-item h3">
+                <a class="mx-4 NavLink"  onclick="scrollToHaader('contakt')">Kontakt</a>
+            </li>
+            <li class="nav-item h3">
+                <a class="mx-4 NavLink" href="" data-bs-toggle="offcanvas" onclick="getBusket()" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Koszyk <i class="fa fa-shopping-basket" aria-hidden="true"></i></a>
+            </li>
+        </ul>
+    </div>
+    <div style="height: 1px;"  id="About_us"></div>
+    <div class="mx-5">
+        <h2 class="mt-5">O nas</h2>
+        <div class="m-5">
+            <p th:utext="${about_us_content}">
+            </p>
+        </div>
+    </div>
+    <div style="height: 1px;" class="m-5" id="Menu"></div> 
+    <div >
+        <h2 class="mx-5 mt-5">Menu</h2>
+        <div class="mx-5 p-5">
+            <table class="text-center w-100 ">
+                <thead class="border-bottom  border-dark bg-light" style="height:50px">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Opis</th>
+                    <th class="px-2" scope="col">Cena</th>
+                    <th class="ps-2" scope="col">Zamów</th>
+                </tr>
+                </thead>
+                <tbody th:each="pizza: ${Pizzas}">
+                <tr class="border-top">
+                    <td class="text-start"><img class="rounded-pill" height="100" width="100" th:src="${pizza.image}"/>
+                    </td>
+                    <td th:text="${pizza.name}"></td>
+                    <td  th:text="${pizza.description}"></td>
+                    <td class="px-2" th:text="${pizza.price}+zł"></td>
+                    <td class="">
+                        <button class="btn btn-success ms-2"  th:onclick="addTobucket([[${pizza}]])">do kosza</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div id="contakt" ></div>
+    <div class="mx-5 mt-5">
+        <h2 class="mt-5">Kontakt</h2>
+        <div class="mt-5 mx-5">
+            <div>
+                <div class="w-50" style="float:left;">
+                    <h4>Dane adresowe:</h4>
+                    <h6 class="ms-5"><i class="fa fa-home me-3"></i>Kielce ul. Paderewskiego 305</h6>
+                    <h6 class="ms-5"><i class="fa fa-phone me-3"></i><a href="" class="link-dark">+48 000 999 111</a>
+                    </h6>
+                    <h6 class="ms-5"><i class="fa fa-envelope-o me-3"></i><a href="" class="link-dark">Pizzeria@gmail.com</a>
+                    </h6>
+                </div>
+                <div class="w-50" style="float:left;">
+                    <h4>Godziny otwarcia:</h4>
+
+
+                    <table class="ms-5">
+                        <thead>
+                        <tr>
+                            <td><i class="fa fa-clock-o me-3"></i></td>
+                            <td>Pon:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Wt:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Śr:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Czw:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Pt:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Sob:</td>
+                            <td>11:00 - 22:00</td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Niedz:</td>
+                            <td class="fst-italic">Nieczynne</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <div style="clear:both;"></div>
+
+            </div>
+            <div class="mt-5 w-100">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d240753.9560658639!2d20.762384617147088!3d51.00419829256024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spl!2spl!4v1689107080977!5m2!1spl!2spl"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="mt-5" style="clear:both;">
+                <span><br/><br/></span>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="bg-dark p-5" style="height:200px">
+    <div class="mx-5">
+    <table class="text-light text-center w-100 ">
+        <thead>
+        <th scope="col">Informacje</th>
+        <th scope="col">Linki</th>
+        <th scope="col">Obserwuj nas na:</th>
+        </thead>
+        <tbody>
+        <td><i class="fa fa-phone me-3"></i><a href="" class="link-light">+48 000 999 111</a></td>
+        <td><a href="/privacy_policy" class="link-light" >Polityka prywatności</a></td>
+        <td>
+            <a href="" class="text-decoration-none link-light">
+                <i class="fa fa-facebook-square me-3 fa-2x" aria-hidden="true"></i>
+            </a>
+            <a href="" class="text-decoration-none link-light">
+                <i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
+            </a>
+        </td>
+        </tbody>
+        <tbody>
+        <td><i class="fa fa-envelope-o me-3"></i><a href="" class="link-light">Pizzeria@gmail.com</a></td>
+        <td><a href="/statute" class="link-light" >Regulamin</a></td>
+        </tbody>
+        <tbody>
+        <td></td>
+        <td><a href="/admin_page" class="link-light" >Panel pracownika</a></td>
+        </tbody>
+    </table>
+
+    </div>
+
+</footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"  th:src="@{/js/index.js}"></script>
+</html>
